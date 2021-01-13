@@ -1,15 +1,16 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 
 public class Main {
 
-	static Contact[] contact = new Contact[100]; // 이런걸 전역이라고 하나요? c랑은 좀 다른 느낌이네요
+	static ArrayList contactList = new ArrayList(); // 이런걸 전역이라고 하나요? c랑은 좀 다른 느낌이네요
 /*
 	for(int i=0; i < 100 ; i++){
 		contact[i] = new Contact(0, "홍길동", "010-0000-0000");
 	}
 */
-	static int contactNum = 0; 
+//	static int contactNum = 0; 
 	static Scanner scanner  = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -55,7 +56,7 @@ public class Main {
 	
 	
 	public static void AddContact() {
-		if(contactNum>=100) {
+		if(contactList.size()>=100) {
 			System.out.println("더 이상 등록할 수 없습니다.."); // 100 명까지 등록
 			return;
 		}
@@ -63,24 +64,31 @@ public class Main {
 		System.out.println("연락처 등록을 시작합니다");
 		System.out.println("==================");
 		
-		System.out.println("이름을 입력하세요>");
-		String name = scanner.next();
-		//contact[contactNum].setName(name); -> 왜 세터로 코딩하면 에러가 날까요?
+		Contact contact = new Contact();
 		
-		System.out.println("번호를 입력하세요>");
-		String phoneNum = scanner.next();
+		System.out.println("이름을 입력하세요>");
+		contact.setName(scanner.next());
+		//contact[contactNum].setNa           me(name); -> 왜 세터로 코딩하면 에러가 날까요?
+		
+		System.out.println("번호를 입력하세요>1");
+		contact.setPhoneNumber(scanner.next());
 		//contact[contactNum].setPhoneNumber(phoneNum);
 		
-		int number = contactNum + 1; 
-		Contact contactAdd = new Contact(number, name, phoneNum);
-		System.out.println(number + "번에 등록되었습니다");
-		contact[contactNum] = contactAdd;
+//		int number = contactNum + 1; 
+//		Contact contactAdd = new Contact(number, name, phoneNum);
 		
-		contactNum++; 
+		contactList.add(contact);
+		
+		
+		System.out.println((contactList.size()) + "번에 등록되었습니다");
+		
+//		contact[contactNum] = contactAdd;
+		
+//		contactNum++; 
 	}
 
 	public static void Search() {
-		if(contactNum == 0) {
+		if(contactList.size() == 0) {
 			System.out.println("등록된 연락처가 없습니다");
 			return;
 		}
@@ -93,10 +101,12 @@ public class Main {
 		
 		String cname;
 		
-		for(int i = 0; i<contactNum; i++) {
-			cname = contact[i].getName();
-			if(cname.equals(name)) {
-				contact[i].Show();
+		Contact contact = new Contact();
+		
+		for(int i = 0; i<contactList.size(); i++) {
+			contact = (Contact) contactList.get(i);
+			if(name.equals(contact.getName())) {
+				contact.Show();
 				return;
 			}
 		}
@@ -104,7 +114,7 @@ public class Main {
 	}
 
 	public static void Delete() {
-		if(contactNum == 0) {
+		if(contactList.size() == 0) {
 			System.out.println("등록된 연락처가 없습니다");
 			return;
 		}
@@ -117,18 +127,12 @@ public class Main {
 		
 		String cname;
 		
-		for(int i = 0; i<contactNum; i++) {
-			cname = contact[i].getName();
-			if(cname.equals(name)) {
-				if(i ==0) {
-					contactNum--;
-					return;
-				}
-				for(int j = i; j<contactNum; j++ ) {
-					contact[j] = contact[i+1];
-					contact[j].setNumber(j);
-				}
-				contactNum--;
+		Contact contact = new Contact();
+		
+		for(int i = 0; i<contactList.size(); i++) {
+			contact = (Contact) contactList.get(i);
+			if(name.equals(contact.getName())) {
+				contactList.remove(i);
 				System.out.println("삭제가 완료되었습니다");
 				return;
 			}
@@ -137,13 +141,17 @@ public class Main {
 	}
 	
 	public static void ShowAll() {
-		if(contactNum == 0) {
+		if(contactList.size() == 0) {
 			System.out.println("등록된 연락처가 없습니다");
 			return;
 		}
-
-		for(int i = 0; i<contactNum; i++) {
-			contact[i].Show();
+		Contact contact = new Contact();
+		
+		for(int i = 0; i<contactList.size(); i++) {
+			contact = (Contact) contactList.get(i);
+			System.out.println((i+1) + "번");
+			contact.Show();
+			System.out.println("\n");
 		}
 	}
 }
